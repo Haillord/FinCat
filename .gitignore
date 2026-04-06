@@ -1,0 +1,41 @@
+# 🔒 Секретные данные
+.env
+config.enc
+license_server/.env
+license_server/license.db
+
+# 📦 Скомпилированные билды
+*.spec
+build/
+dist/
+*.exe
+*.bin
+rsx_cache_db.bin
+
+# 📝 Логи и отладка
+logs/
+latest_crash/
+*.log
+crash_*.txt
+
+# 🧪 Тестовые файлы
+test_*.*
+test_bank.*
+test_transactions.*
+
+# 🐍 Python артефакты
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+env/
+
+# 📄 Системные файлы
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*.swp

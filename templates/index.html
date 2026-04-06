@@ -1,0 +1,64 @@
+﻿<!-- Добавить перед закрывающим </body> -->
+<script>
+    // Экранирование HTML
+    function escapeHtml(unsafe) {
+        return unsafe.replace(/[&<>"]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            if (m === '"') return '&quot;';
+            return m;
+        });
+    }
+
+    // В функции displayResults замените вставку через innerHTML на безопасную
+    function displayResults(data, summary) {
+        const tbody = document.getElementById('results-table');
+        tbody.innerHTML = ''; // очистка
+
+        data.forEach((item, idx) => {
+            const row = document.createElement('tr');
+            row.className = 'transaction-row';
+            row.dataset.category = item.category;
+            row.dataset.description = (item.cleaned_description || '').toLowerCase();
+            row.dataset.index = idx;
+
+            // Создаём ячейки через createElement и textContent
+            const tdDate = document.createElement('td');
+            tdDate.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-900';
+            tdDate.textContent = escapeHtml(item.date);
+            row.appendChild(tdDate);
+
+            const tdOrig = document.createElement('td');
+            tdOrig.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-500';
+            tdOrig.textContent = escapeHtml(item.original_description);
+            row.appendChild(tdOrig);
+
+            const tdClean = document.createElement('td');
+            tdClean.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium';
+            tdClean.textContent = escapeHtml(item.cleaned_description);
+            row.appendChild(tdClean);
+
+            const tdAmount = document.createElement('td');
+            tdAmount.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-900';
+            tdAmount.textContent = formatCurrency(item.amount); // formatCurrency уже безопасен
+            row.appendChild(tdAmount);
+
+            const tdCat = document.createElement('td');
+            tdCat.className = 'px-6 py-4 whitespace-nowrap category-cell';
+            const span = document.createElement('span');
+            span.className = `category-badge ${getCategoryColor(item.category)}`;
+            span.textContent = escapeHtml(item.category);
+            tdCat.appendChild(span);
+            row.appendChild(tdCat);
+
+            tbody.appendChild(row);
+        });
+
+        updateSummary(summary);
+        resultsSection.classList.remove('hidden');
+        setupFilters();
+        setupSearch();
+        setupInlineEditing();
+    }
+</script>

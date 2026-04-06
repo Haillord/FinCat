@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Активация — ФинКат</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0b1220;
+            color: #e5e7eb;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .card {
+            background: #111827;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 36px;
+            width: 100%;
+            max-width: 520px;
+        }
+        h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: #f9fafb; }
+        .subtitle { font-size: 13px; color: #9ca3af; margin-bottom: 24px; }
+        .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; }
+        .alert-error { background: #2d1515; border: 1px solid #7f1d1d; color: #fca5a5; }
+        .alert-success { background: #14291e; border: 1px solid #14532d; color: #86efac; }
+        label { display: block; font-size: 13px; color: #d1d5db; margin-bottom: 6px; font-weight: 500; }
+        input[type="text"] {
+            width: 100%; background: #1f2937; border: 1px solid #374151;
+            color: #f9fafb; border-radius: 8px; padding: 10px 14px;
+            font-size: 13px; font-family: monospace; outline: none; transition: border-color 0.2s;
+        }
+        input[type="text"]:focus { border-color: #3b82f6; }
+        input::placeholder { color: #6b7280; }
+        .btn-primary {
+            width: 100%; background: #2563eb; color: white; border: none;
+            border-radius: 8px; padding: 11px; font-size: 14px; font-weight: 600;
+            cursor: pointer; margin-top: 14px; transition: background 0.2s;
+        }
+        .btn-primary:hover { background: #1d4ed8; }
+        .divider { border-top: 1px solid #374151; margin: 24px 0; }
+        .section-title { font-size: 14px; font-weight: 600; color: #f3f4f6; margin-bottom: 8px; }
+        .section-text { font-size: 13px; color: #9ca3af; margin-bottom: 16px; line-height: 1.5; }
+        .hwid-block { background: #1f2937; border: 1px solid #374151; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+        .hwid-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; font-weight: 600; margin-bottom: 8px; }
+        .hwid-row { display: flex; align-items: center; gap: 10px; }
+        .hwid-value { flex: 1; background: #0b1220; color: #34d399; font-family: monospace; font-size: 12px; padding: 8px 12px; border-radius: 6px; word-break: break-all; user-select: all; }
+        .btn-copy { background: #374151; color: #e5e7eb; border: none; border-radius: 6px; padding: 8px 14px; font-size: 12px; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+        .btn-copy:hover { background: #4b5563; }
+        .hwid-hint { font-size: 11px; color: #6b7280; margin-top: 8px; }
+        .btn-telegram { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: #2563eb; color: white; border: none; border-radius: 8px; padding: 11px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+        .btn-telegram:hover { background: #1d4ed8; }
+        .footer-note { font-size: 11px; color: #4b5563; margin-top: 20px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Активация лицензии</h1>
+        <p class="subtitle">Введите лицензионный ключ для начала работы.</p>
+
+        {% if message %}
+        <div class="alert {{ 'alert-success' if success else 'alert-error' }}">
+            {{ message }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            <label for="license_key">Лицензионный ключ</label>
+            <input id="license_key" name="license_key" type="text" placeholder="Вставьте ключ сюда" required>
+            <button type="submit" class="btn-primary">Активировать</button>
+        </form>
+
+        <div class="divider"></div>
+
+        <p class="section-title">Как получить ключ?</p>
+        <p class="section-text">Напишите нам в Telegram и скиньте ваш ID устройства — пришлём ключ в течение нескольких минут.</p>
+
+        <div class="hwid-block">
+            <p class="hwid-label">Ваш ID устройства (HWID)</p>
+            <div class="hwid-row">
+                <span class="hwid-value" id="hwid-val">{{ hwid }}</span>
+                <button class="btn-copy" id="copy-btn" onclick="copyHwid()">Копировать</button>
+            </div>
+            <p class="hwid-hint">Скопируйте и отправьте нам — ключ привяжется к этому устройству.</p>
+        </div>
+
+        <a href="https://t.me/haillord" target="_blank" class="btn-telegram">
+            ✈ Написать в Telegram
+        </a>
+
+        <p class="footer-note">Ключ хранится локально в зашифрованном виде. При смене устройства потребуется новый ключ.</p>
+    </div>
+
+    <script>
+        function copyHwid() {
+            const hwid = document.getElementById('hwid-val').textContent;
+            navigator.clipboard.writeText(hwid).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.textContent = 'Скопировано ✅';
+                setTimeout(() => btn.textContent = 'Копировать', 2000);
+            });
+        }
+        {% if success %}
+        setTimeout(function() { window.location.href = '/'; }, 1500);
+        {% endif %}
+    </script>
+</body>
+</html>
