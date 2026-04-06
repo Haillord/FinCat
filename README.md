@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="100%" alt="FinCat Banner" src="https://i.imgur.com/4xQZGKf.png">
+  <img width="100%" alt="FinCat Banner" src="icon.png">
 </p>
 
 <p align="center">
