@@ -1,8 +1,4 @@
 <p align="center">
-  <img src="icon.png" alt="FinCat Banner" style="max-width: 100%; width: auto; height: auto;">
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/github/license/Haillord/FinCat?style=for-the-badge&color=red" alt="license">
   <img src="https://img.shields.io/github/stars/Haillord/FinCat?style=for-the-badge&color=red" alt="stars">
   <img src="https://img.shields.io/github/last-commit/Haillord/FinCat?style=for-the-badge&color=red" alt="last commit">
